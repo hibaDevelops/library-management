@@ -1,13 +1,25 @@
 from __init__ import db
-from datetime import datetime
+
+from app.Models.BaseModel import BaseModel
 
 
-class Book(db.Model):
+class Book(BaseModel, db.Model):
     __tablename__ = "books"
     
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(200), nullable=False)
-    # created = db.Column(db.DateTime, default=datetime.utcnow)
-    
+    name = db.Column(db.String(255), nullable=False)
+    author_id = db.Column(db.Integer, db.ForeignKey("authors.id"))
+    publisher_id = db.Column(db.Integer, db.ForeignKey("publishers.id"))
+    available_copies_in_library = db.Column(db.Integer, nullable=False)
+    available_copies_for_sale = db.Column(db.Integer, nullable=False)
+    price = db.Column(db.Float, default=0.00)
+    location = db.Column(db.String(255))
+
+    # Relationships (optional)
+    author = db.relationship("Author", backref="books", passive_deletes=True)
+    publisher = db.relationship("Publisher", backref="books", passive_deletes=True)
+
     def __repr__(self):
-        return '<Name %r>' % self.name
+        return f'<Book {self.name}>'
+
+from app.Models.Author import Author
+from app.Models.Publisher import Publisher
