@@ -3,6 +3,24 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
+//material UI library. 
+// UI tables can be used. packages.json add there.
+//work on this branch list-books
+//work on client folder
+//move everything to proper project folders like components. 
+//see if endpoints are properly being called can we console log on browser. in UI show as a list. 
+//basic structure. 
+//instead of listing then we can pass to material UI and do it there
+
+//ACTION ITEMS
+//work on listing items and get it running for now
+//make a new branch for myself. 
+//run on gitbash terminal
+//python run.py for backend
+//npm run dev for frontend
+
+//pull request
+
 function App() {
   const [count, setCount] = useState(0);
   const [books, setBooks] = useState([]);
@@ -14,6 +32,8 @@ function App() {
     setBooks(data.books);
     console.log(data.books);
   };
+
+
 
   useEffect(() => {
     fetchUsers();
