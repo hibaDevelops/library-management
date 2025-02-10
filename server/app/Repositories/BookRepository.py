@@ -9,5 +9,5 @@ class BookRepository:
         self.db = db
         
     def list_books(self) -> List[Book]:
-        stm = self.db.select(Book).order_by(Book.name)
+        stm = self.db.select(Book).filter(Book.deleted_at == None).order_by(Book.name)
         return self.db.session.scalars(stm).all()
