@@ -45,3 +45,13 @@ class BookRepository:
         except Exception as e:
             self.db.session.rollback()
             raise RuntimeError("An unexpected error occurred while creating the book.") from e
+
+    def update(self, book: Book, update_fields: dict) -> Book:
+        try:
+            for field, value in update_fields.items():
+                setattr(book, field, value)
+            self.db.session.commit()
+            return book
+        except Exception as e:
+            self.db.session.rollback()
+            raise RuntimeError("An unexpected error occurred while updating the book.") from e
