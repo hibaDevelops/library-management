@@ -9,3 +9,4 @@ cryptography
 flask-restful
 Flask-Injector
 python-dotenv
+werkzeug
