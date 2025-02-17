@@ -1,7 +1,6 @@
 -- Create enums for MySQL
 SET @book_type_enum = 'for_sale,for_lending';
 SET @user_role_enum = 'librarian,admin,sales_person';
-SET @lending_status_enum = 'active,returned,overdue';
 SET @sales_status_enum = 'cash_in_hand,processed';
 
 -- Table for Authors
@@ -27,7 +26,7 @@ CREATE TABLE clients (
     id INT AUTO_INCREMENT PRIMARY KEY,
     firstname VARCHAR(100) NOT NULL,
     lastname VARCHAR(100),
-    phone VARCHAR(15),
+    phone VARCHAR(15) UNIQUE NOT NULL,
     email VARCHAR(255) UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -69,19 +68,30 @@ CREATE TABLE books (
 CREATE TABLE lendings (
     id INT AUTO_INCREMENT PRIMARY KEY,
     client_id INT NOT NULL,
-    book_id INT NOT NULL,
-    user_id INT NOT NULL,
+--    user_id INT NOT NULL,
     lent_date DATE NOT NULL,
-    due_date DATE,
+    due_date DATE NOT NULL,
     return_date DATE,
-    status ENUM(@lending_status_enum) NOT NULL,
+    status ENUM('active', 'returned', 'overdue') NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     deleted_at TIMESTAMP NULL,
     FOREIGN KEY (client_id) REFERENCES clients(id),
     FOREIGN KEY (book_id) REFERENCES books(id),
-    FOREIGN KEY (user_id) REFERENCES users(id)
+--    FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+CREATE TABLE lending_books (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    lending_id INT NOT NULL,
+    book_id INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP NULL,
+    FOREIGN KEY (lending_id) REFERENCES lendings(id) ON DELETE CASCADE,
+    FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE
+);
+
 
 -- Table for Sales
 CREATE TABLE sales (

@@ -1,5 +1,6 @@
 from app.DTO.AuthorDTO import AuthorDTO
 from app.DTO.BookDTO import BookDTO
+from app.DTO.LendingBookDTO import LendingBookDTO
 from app.DTO.PublisherDTO import PublisherDTO
 from app.Models.Book import Book
 
@@ -18,4 +19,11 @@ class BookMapper:
             updated_at=book.updated_at,
             author=author,
             publisher=publisher
+        )
+
+    @staticmethod
+    def to_lending_book_dto(book: Book) -> LendingBookDTO:
+        return LendingBookDTO(
+            id=book.id,
+            name=book.name,
         )
