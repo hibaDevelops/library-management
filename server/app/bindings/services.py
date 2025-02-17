@@ -5,9 +5,11 @@ def services(binder):
     from app.Services.Lendings.ListLendingsService import ListLendingsService
     from app.Services.Lendings.FindLendingByIDService import FindLendingByIDService
     from app.Services.Lendings.CreateLendingService import CreateLendingService
+    from app.Services.Lendings.RetrieveLendingService import RetrieveLendingService
     binder.bind(ListAllBooksService, to=ListAllBooksService)
     binder.bind(FindBookByIdService, to=FindBookByIdService)
     binder.bind(CreateBookService, to=CreateBookService)
     binder.bind(ListLendingsService, to=ListLendingsService)
     binder.bind(FindLendingByIDService, to=FindLendingByIDService)
     binder.bind(CreateLendingService, to=CreateLendingService)
+    binder.bind(RetrieveLendingService, to=RetrieveLendingService)

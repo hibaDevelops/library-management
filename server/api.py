@@ -8,6 +8,7 @@ from app.Controllers.Books.update_book_by_id_controller import UpdateBookByIdRes
 from app.Controllers.Lendings.CreateLendingController import CreateLendingResource
 from app.Controllers.Lendings.FindLendingByIDController import FindLendingByIdResource
 from app.Controllers.Lendings.ListLendingsController import ListLendingsResource
+from app.Controllers.Lendings.RetrieveLendingController import RetrieveLendingResource
 from app.bindings.database import Database
 from app.bindings.repositories import repositories
 from app.bindings.services import services
@@ -56,6 +57,12 @@ api.add_resource(
     "/api/v1/lendings/<string:lending_id>",
     methods=["GET"],
     endpoint="find_lending_by_id"
+)
+api.add_resource(
+    RetrieveLendingResource,
+    "/api/v1/lendings/<string:lending_id>/retrieve",
+    methods=["PATCH"],
+    endpoint="retrieve_lent_book"
 )
 
 injector = FlaskInjector(app=app, modules=[services, repositories, Database])
