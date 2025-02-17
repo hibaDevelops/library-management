@@ -19,7 +19,3 @@ class BookMapper:
             author=author,
             publisher=publisher
         )
-
-    @staticmethod
-    def from_dto(book_dto: BookDTO) -> Book:
-        return Book(id=book_dto.id, name=book_dto.name, author=book_dto.author)
