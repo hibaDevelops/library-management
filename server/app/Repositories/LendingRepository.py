@@ -28,7 +28,7 @@ class LendingRepository:
         book_id: int,
         lent_date: str,
         due_date: str,
-    ) -> Lending | None:
+    ) -> Lending:
         new_lending = Lending(
             client_id=client_id,
             book_id=book_id,
