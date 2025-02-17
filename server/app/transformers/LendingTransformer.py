@@ -9,5 +9,5 @@ class LendingTransformer:
     @staticmethod
     def transform(lending: Lending) -> LendingDTO:
         client = ClientMapper.to_dto(lending.client).to_dict()
-        books_dto = [BookMapper.to_lending_book_dto(book).to_dict() for book in lending.books]
-        return LendingMapper.to_dto(lending, client, books_dto).to_dict()
+        book_dto = BookMapper.to_lending_book_dto(lending.book).to_dict()
+        return LendingMapper.to_dto(lending, client, book_dto).to_dict()

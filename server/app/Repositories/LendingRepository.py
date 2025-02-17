@@ -1,4 +1,3 @@
-from datetime import datetime
 from typing import List
 
 from flask_injector import inject
@@ -14,10 +13,8 @@ class LendingRepository:
 
     def list_lendings(self) -> List[Lending]:
         stm = self.db.select(Lending).filter(
-            Lending.deleted_at == None,
-            Lending.due_date < datetime.now(),
-            Lending.return_date == None
-        ).order_by(Lending.due_date)
+            Lending.deleted_at == None
+        ).order_by(Lending.status, Lending.due_date)
         return self.db.session.scalars(stm).all()
 
     def get_by_id(self, lending_id: int) -> Lending | None:

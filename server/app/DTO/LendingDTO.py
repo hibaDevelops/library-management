@@ -7,7 +7,7 @@ class LendingDTO:
         self,
         id: int,
         client: ClientDTO,
-        books: list[LendingBookDTO],
+        book: LendingBookDTO,
         lent_date: str,
         due_date: str,
         return_date: str,
@@ -17,7 +17,7 @@ class LendingDTO:
     ):
         self.id = id
         self.client = client
-        self.books = books
+        self.book = book
         self.lent_date = lent_date
         self.due_date = due_date
         self.return_date = return_date
@@ -29,7 +29,7 @@ class LendingDTO:
         return {
             'id': self.id,
             'client': self.client,
-            'books': self.books,
+            'book': self.book,
             'lent_date': self.lent_date,
             'due_date': self.due_date,
             'return_date': self.return_date,
