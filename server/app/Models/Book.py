@@ -17,7 +17,7 @@ class Book(BaseModel, db.Model):
     # Relationships (optional)
     author = db.relationship("Author", backref="books", passive_deletes=True)
     publisher = db.relationship("Publisher", backref="books", passive_deletes=True)
-    lendings = db.relationship('Lending', secondary='lending_books', backref=db.backref('books_association', lazy=True))
+    lending = db.relationship('Lending', backref='books', lazy=True)
 
     def __repr__(self):
         return f'<Book {self.name}>'

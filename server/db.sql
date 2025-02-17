@@ -68,6 +68,7 @@ CREATE TABLE books (
 CREATE TABLE lendings (
     id INT AUTO_INCREMENT PRIMARY KEY,
     client_id INT NOT NULL,
+    book_id INT NOT NULL,
 --    user_id INT NOT NULL,
     lent_date DATE NOT NULL,
     due_date DATE NOT NULL,
@@ -79,17 +80,6 @@ CREATE TABLE lendings (
     FOREIGN KEY (client_id) REFERENCES clients(id),
     FOREIGN KEY (book_id) REFERENCES books(id),
 --    FOREIGN KEY (user_id) REFERENCES users(id)
-);
-
-CREATE TABLE lending_books (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    lending_id INT NOT NULL,
-    book_id INT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    deleted_at TIMESTAMP NULL,
-    FOREIGN KEY (lending_id) REFERENCES lendings(id) ON DELETE CASCADE,
-    FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE
 );
 
 
