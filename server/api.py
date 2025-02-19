@@ -5,6 +5,7 @@ from app.Controllers.Books.create_book_controller import CreateBookResource
 from app.Controllers.Books.find_book_by_id_controller import FindBookByIdResource
 from app.Controllers.Books.list_books_controller import ListBooksResource
 from app.Controllers.Books.update_book_by_id_controller import UpdateBookByIdResource
+from app.Controllers.Clients.CreateClientController import CreateClientResource
 from app.Controllers.Clients.FindClientByIDController import FindClientByIdResource
 from app.Controllers.Clients.ListClientsController import ListClientsResource
 from app.Controllers.Lendings.CreateLendingController import CreateLendingResource
@@ -73,6 +74,12 @@ api.add_resource(
     "/api/v1/clients",
     methods=["GET"],
     endpoint="list_clients"
+)
+api.add_resource(
+    CreateClientResource,
+    "/api/v1/clients",
+    methods=["POST"],
+    endpoint="create_client"
 )
 api.add_resource(
     FindClientByIdResource,
