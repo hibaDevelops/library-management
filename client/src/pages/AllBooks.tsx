@@ -6,6 +6,9 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import AddIcon from '@mui/icons-material/Add';
 import '../App.css';
+import { Link } from "react-router-dom";
+
+import AddBook from "../components/AddBook"; 
 
 interface Author {
   id: number;
@@ -30,6 +33,8 @@ interface Book {
 }
 
 function App() {
+  const [openModal, setOpenModal] = useState(false);
+
   const [books, setBooks] = useState<Book[]>([]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const baseURL = 'http://localhost:8080';
@@ -70,8 +75,7 @@ function App() {
       {/* Navbar */}
       <AppBar position="static" sx={{ backgroundColor: "#ffffff", color: "black" }}>
         <Toolbar>
-          <img src="/logo.png" alt="Library Logo" style={{ height: 50, marginRight: 10 }} />
-          
+        <Typography variant="h6" sx={{ flexGrow: 1 }}>All Books</Typography>
           {/* Dropdown Menu */}
           <Button 
             aria-controls="simple-menu" 
@@ -92,21 +96,21 @@ function App() {
             <MenuItem onClick={handleMenuClose}>All Books</MenuItem>
           </Menu>
 
-          <Typography variant="h6" sx={{ flexGrow: 1, marginLeft: 2 }}>
-            Borrowing | Sales | About | My Account
-          </Typography>
-
+          
           {/* Add New Book Button */}
           <Button 
             variant="contained" 
             sx={{ backgroundColor: "#8BC34A", color: "black", marginLeft: 2 }}
             startIcon={<AddIcon />}
+            onClick={() => setOpenModal(true)}
           >
             Add New Book
           </Button>
+          <AddBook open={openModal} onClose={() => setOpenModal(false)} />
         </Toolbar>
-      </AppBar>
 
+      </AppBar>
+      
       {/* Books Table */}
       <TableContainer component={Paper} sx={{ marginTop: 2, padding: 2 }}>
         <Table>

@@ -3,16 +3,16 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Books from './pages/AllBooks';
-import Authors from './pages/BorrowingRecords';
-import Publishers from './pages/SalesRecords';
+import Borrowing from './pages/BorrowingRecords';
+import Sales from './pages/SalesRecords';
 
 const AppRoutes = () => {
     return (
         <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/books" element={<Books />} />
-            <Route path="/authors" element={<Authors />} />
-            <Route path="/publishers" element={<Publishers />} />
+            <Route path="/borrowing" element={<Borrowing />} />
+            <Route path="/sales" element={<Sales />} />
         </Routes>
     );
 };

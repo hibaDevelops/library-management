@@ -24,7 +24,7 @@ export const MuiNavbar = () => {
   return (
     <AppBar position="fixed" className="navbar">
       <Toolbar>
-        <IconButton size="large" edge="start" color="inherit" aria-label="logo">
+        <IconButton size="large" edge="start" color="inherit" aria-label="logo" component={Link} to=''>
           <CatchingPokemonIcon />
         </IconButton>
         <Typography
@@ -39,23 +39,16 @@ export const MuiNavbar = () => {
           <Button
             color="inherit"
             id="books-menu"
-            onClick={handleClick}
-            aria-controls={open ? "books-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
-            
+            component={Link} to='Books'
           >
             Books
           </Button>
-          <Button color="inherit">Borrowing</Button>
-          <Button color="inherit">Sales</Button>
-          <Button color="inherit">About</Button>
+          <Button color="inherit" component={Link} to='Borrowing'>Borrowing</Button>
+          <Button color="inherit" component={Link} to='Sales'>Sales</Button>
+          <Button color="inherit" >About</Button>
           <Button color="inherit">My Account</Button>
         </Stack>
-        <Menu id="books-menu" anchorEl={anchorEl} open={open} MenuListProps={{'aria-labelledby': 'books-button'}} onClose={handleClose}>
-          <MenuItem onClick={handleClose}>Search by Author</MenuItem>
-          <MenuItem onClick={handleClose}>All Books</MenuItem>
-        </Menu>
+        
       </Toolbar>
     </AppBar>
   );
