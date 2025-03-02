@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react';
 import {
   AppBar, Toolbar, Typography, Button, Menu, MenuItem, Table, TableBody, TableCell,
-  TableContainer, TableHead, TableRow, Paper, IconButton
+  TableContainer, TableHead, TableRow, Paper
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import AddIcon from '@mui/icons-material/Add';
 import '../App.css';
-import { Link } from "react-router-dom";
-
 import AddBook from "../components/AddBook"; 
 
 interface Author {
@@ -23,35 +21,32 @@ interface Publisher {
 interface Book {
   id: number;
   name: string;
-  author: Author;
+  author: Author | null;  // ✅ Fix: Allow `null` values
   location: string;
   available_copies_in_library: number;
   available_copies_for_sale: number;
   price: number;
-  publisher: Publisher;
+  publisher: Publisher | null; // ✅ Fix: Allow `null` values
   image_url?: string;
 }
 
-function App() {
+const AllBooks = () => {
   const [openModal, setOpenModal] = useState(false);
-
   const [books, setBooks] = useState<Book[]>([]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const baseURL = 'http://localhost:8080';
 
+  // ✅ Fetch books from the backend
   const fetchBooks = async () => {
     try {
-      console.log("Fetching books...");
       const response = await fetch(`${baseURL}/api/v1/books`);
       const data = await response.json();
       
-      console.log("Fetched books:", data);
-
-      // Fix: Ensure books is always an array
+      // ✅ Fix: Ensure books is always an array
       if (data.books) {
         setBooks(Array.isArray(data.books) ? data.books : [data.books]);
       } else {
-        console.warn("No books data found in API response.");
+        setBooks([]); // Handle case where no books are available
       }
     } catch (error) {
       console.error("Error fetching books:", error);
@@ -75,7 +70,8 @@ function App() {
       {/* Navbar */}
       <AppBar position="static" sx={{ backgroundColor: "#ffffff", color: "black" }}>
         <Toolbar>
-        <Typography variant="h6" sx={{ flexGrow: 1 }}>All Books</Typography>
+          <Typography variant="h6" sx={{ flexGrow: 1 }}>All Books</Typography>
+
           {/* Dropdown Menu */}
           <Button 
             aria-controls="simple-menu" 
@@ -96,7 +92,6 @@ function App() {
             <MenuItem onClick={handleMenuClose}>All Books</MenuItem>
           </Menu>
 
-          
           {/* Add New Book Button */}
           <Button 
             variant="contained" 
@@ -106,9 +101,8 @@ function App() {
           >
             Add New Book
           </Button>
-          <AddBook open={openModal} onClose={() => setOpenModal(false)} />
+          <AddBook open={openModal} onClose={() => setOpenModal(false)} onBookAdded={fetchBooks} />
         </Toolbar>
-
       </AppBar>
       
       {/* Books Table */}
@@ -123,7 +117,7 @@ function App() {
               <TableCell><b>Available Copies</b></TableCell>
               <TableCell><b>Available Copies in Shop</b></TableCell>
               <TableCell><b>Price</b></TableCell>
-              <TableCell><b>Actions</b></TableCell>
+              <TableCell><b>Publisher</b></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -138,27 +132,20 @@ function App() {
                       style={{ height: 50 }} 
                     />
                   </TableCell>
-                  
+
                   {/* Book Details */}
                   <TableCell>{book.name}</TableCell>
-                  <TableCell>{book.author.name}</TableCell>
+
+                  {/* ✅ Fix: Handle `null` authors */}
+                  <TableCell>{book.author ? book.author.name : "Unknown Author"}</TableCell>
+
                   <TableCell>{book.location}</TableCell>
                   <TableCell>{book.available_copies_in_library}</TableCell>
                   <TableCell>{book.available_copies_for_sale}</TableCell>
                   <TableCell>${book.price.toFixed(2)}</TableCell>
 
-                  {/* Action Buttons */}
-                  <TableCell>
-                    <Button variant="contained" sx={{ backgroundColor: "#FFEB3B", color: "black", marginRight: 1 }}>
-                      Update
-                    </Button>
-                    <Button variant="contained" sx={{ backgroundColor: "#FFEB3B", color: "black", marginRight: 1 }}>
-                      Issue
-                    </Button>
-                    <Button variant="contained" sx={{ backgroundColor: "#FFEB3B", color: "black" }}>
-                      Sell
-                    </Button>
-                  </TableCell>
+                  {/* ✅ Fix: Handle `null` publishers */}
+                  <TableCell>{book.publisher ? book.publisher.name : "Unknown Publisher"}</TableCell>
                 </TableRow>
               ))
             ) : (
@@ -173,4 +160,4 @@ function App() {
   );
 }
 
-export default App;
+export default AllBooks;
