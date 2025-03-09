@@ -15,6 +15,8 @@ class BookMapper:
             available_copies_for_sale=book.available_copies_for_sale,
             price=book.price,
             location=book.location,
+            language=book.language,
+            photo=book.photo,
             created_at=book.created_at,
             updated_at=book.updated_at,
             author=author,

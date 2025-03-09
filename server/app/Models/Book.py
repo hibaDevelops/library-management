@@ -13,6 +13,8 @@ class Book(BaseModel, db.Model):
     available_copies_for_sale = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Float, default=0.00)
     location = db.Column(db.String(255))
+    language = db.Column(db.String(255))
+    photo = db.Column(db.String(255))
 
     # Relationships (optional)
     author = db.relationship("Author", backref="books", passive_deletes=True)

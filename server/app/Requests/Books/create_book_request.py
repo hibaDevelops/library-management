@@ -49,3 +49,15 @@ class CreateBookRequest(RequestInterface):
             store_missing=False,
             required=False
         )
+        self.parser.add_argument(
+            "language",
+            type=str,
+            store_missing=False,
+            required=False
+        )
+        self.parser.add_argument(
+            "photo",
+            type=str,
+            store_missing=False,
+            required=False
+        )

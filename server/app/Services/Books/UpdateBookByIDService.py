@@ -27,6 +27,8 @@ class UpdateBookByIDService:
         available_copies_for_sale: int = None,
         price: float = None,
         location: str = None,
+        language: str = None,
+        photo: str = None,
         author_id: int = None,
         publisher_id: int = None
     ) -> Book:
@@ -54,6 +56,10 @@ class UpdateBookByIDService:
             update_fields['price'] = price
         if location is not None:
             update_fields['location'] = location
+        if language is not None:
+            update_fields['language'] = language
+        if photo is not None:
+            update_fields['photo'] = photo
         if author_id is not None:
             update_fields['author_id'] = author_id
         if publisher_id is not None:

@@ -26,6 +26,8 @@ class CreateBookService:
         available_copies_for_sale: int,
         price: float = None,
         location: str = None,
+        language: str = None,
+        photo: str = None,
         author_id: int = None,
         publisher_id: int = None
     ) -> Book:
@@ -45,6 +47,8 @@ class CreateBookService:
             available_copies_for_sale,
             price,
             location,
+            language,
+            photo,
             author_id,
             publisher_id
         )
