@@ -43,7 +43,25 @@ class UpdateBookRequest(RequestInterface):
             required=False
         )
         self.parser.add_argument(
-            "location",
+            "library_location",
+            type=str,
+            store_missing=False,
+            required=False
+        )
+        self.parser.add_argument(
+            "bookstore_location",
+            type=str,
+            store_missing=False,
+            required=False
+        )
+        self.parser.add_argument(
+            "language",
+            type=str,
+            store_missing=False,
+            required=False
+        )
+        self.parser.add_argument(
+            "photo",
             type=str,
             store_missing=False,
             required=False

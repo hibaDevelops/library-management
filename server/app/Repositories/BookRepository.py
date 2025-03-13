@@ -25,7 +25,10 @@ class BookRepository:
         available_copies_in_library,
         available_copies_for_sale,
         price,
-        location,
+        library_location,
+        bookstore_location,
+        language,
+        photo,
         author_id,
         publisher_id
     ) -> Book | None:
@@ -34,7 +37,10 @@ class BookRepository:
             available_copies_in_library=available_copies_in_library,
             available_copies_for_sale=available_copies_for_sale,
             price=price,
-            location=location,
+            library_location=library_location,
+            bookstore_location=bookstore_location,
+            language=language,
+            photo=photo,
             author_id=author_id,
             publisher_id=publisher_id
         )
