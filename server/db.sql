@@ -90,17 +90,26 @@ CREATE TABLE lendings (
 CREATE TABLE sales (
     id INT AUTO_INCREMENT PRIMARY KEY,
     client_id INT NOT NULL,
-    book_id INT NOT NULL,
-    user_id INT NOT NULL,
+--    user_id INT NOT NULL,
     sale_date DATE NOT NULL,
-    quantities INT NOT NULL,
-    total_amount DECIMAL(10, 2) NOT NULL,
     total_discount DECIMAL(10, 2) DEFAULT 0.00,
-    status ENUM(@sales_status_enum) NOT NULL,
+    status ENUM('cash_in_hand', 'processed', 'returned') NOT NULL,
+    return_date DATE NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     deleted_at TIMESTAMP NULL,
     FOREIGN KEY (client_id) REFERENCES clients(id),
-    FOREIGN KEY (book_id) REFERENCES books(id),
-    FOREIGN KEY (user_id) REFERENCES users(id)
+--    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE sale_books (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    sale_id INT NOT NULL,
+    book_id INT NOT NULL,
+    quantity INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP NULL,
+    FOREIGN KEY (sale_id) REFERENCES sales(id),
+    FOREIGN KEY (book_id) REFERENCES books(id)
 );

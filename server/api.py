@@ -12,6 +12,7 @@ from app.Controllers.Lendings.CreateLendingController import CreateLendingResour
 from app.Controllers.Lendings.FindLendingByIDController import FindLendingByIdResource
 from app.Controllers.Lendings.ListLendingsController import ListLendingsResource
 from app.Controllers.Lendings.RetrieveLendingController import RetrieveLendingResource
+from app.Controllers.Sales.ListSalesController import ListSalesResource
 from app.bindings.database import Database
 from app.bindings.repositories import repositories
 from app.bindings.services import services
@@ -86,6 +87,14 @@ api.add_resource(
     "/api/v1/clients/<string:client_id>",
     methods=["GET"],
     endpoint="find_client_by_id"
+)
+
+# Client endpoints
+api.add_resource(
+    ListSalesResource,
+    "/api/v1/sales",
+    methods=["GET"],
+    endpoint="list_sales"
 )
 
 injector = FlaskInjector(app=app, modules=[services, repositories, Database])

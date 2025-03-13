@@ -2,7 +2,9 @@ from app.DTO.AuthorDTO import AuthorDTO
 from app.DTO.BookDTO import BookDTO
 from app.DTO.LendingBookDTO import LendingBookDTO
 from app.DTO.PublisherDTO import PublisherDTO
+from app.DTO.SaleBookDTO import SaleBookDTO
 from app.Models.Book import Book
+from app.Models.SaleBook import SaleBook
 
 
 class BookMapper:
@@ -29,4 +31,13 @@ class BookMapper:
         return LendingBookDTO(
             id=book.id,
             name=book.name,
+        )
+
+    @staticmethod
+    def to_sale_book_dto(sale_book: SaleBook) -> SaleBookDTO:
+        return SaleBookDTO(
+            id=sale_book.book.id,
+            name=sale_book.book.name,
+            price=sale_book.book.price,
+            quantity=sale_book.quantity
         )

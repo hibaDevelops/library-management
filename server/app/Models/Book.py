@@ -21,6 +21,7 @@ class Book(BaseModel, db.Model):
     author = db.relationship("Author", backref="books", passive_deletes=True)
     publisher = db.relationship("Publisher", backref="books", passive_deletes=True)
     lending = db.relationship('Lending', backref='books', lazy=True)
+    sales = db.relationship('Sale', secondary='sale_books', backref=db.backref('sales_association', lazy=True))
 
     def __repr__(self):
         return f'<Book {self.name}>'
@@ -29,3 +30,5 @@ class Book(BaseModel, db.Model):
 from app.Models.Author import Author  # noqa
 from app.Models.Publisher import Publisher  # noqa
 from app.Models.Lending import Lending  # noqa
+from app.Models.Sale import Sale  # noqa
+from app.Models.SaleBook import SaleBook  # noqa
