@@ -7,14 +7,11 @@ from app.Models.Sale import Sale
 class SaleMapper:
     @staticmethod
     def calculate_total_amount(books_dto: list[SaleBookDTO], sale: Sale):
-        total_before_discount = 0
+        total_amount = 0
         for book in books_dto:
-            print(book.name)
-            total_before_discount += book.quantity * book.price
+            total_amount += book.quantity * book.price
 
-        # Apply the discount to the total amount
-        total_after_discount = total_before_discount - sale.total_discount
-        return total_after_discount
+        return total_amount
 
     @staticmethod
     def to_dto(sale: Sale, client_dto: ClientDTO, books_dto: list[SaleBookDTO]) -> SaleDTO:
