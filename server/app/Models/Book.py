@@ -12,7 +12,8 @@ class Book(BaseModel, db.Model):
     available_copies_in_library = db.Column(db.Integer, nullable=False)
     available_copies_for_sale = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Float, default=0.00)
-    location = db.Column(db.String(255))
+    library_location = db.Column(db.String(255))
+    bookstore_location = db.Column(db.String(255))
     language = db.Column(db.String(255))
     photo = db.Column(db.String(255))
 

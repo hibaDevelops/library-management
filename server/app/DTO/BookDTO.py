@@ -11,7 +11,8 @@ class BookDTO:
         available_copies_in_library: int,
         available_copies_for_sale: int,
         price: float,
-        location: str,
+        library_location: str,
+        bookstore_location: str,
         language: str,
         photo: str,
         created_at: str,
@@ -24,7 +25,8 @@ class BookDTO:
         self.available_copies_in_library = available_copies_in_library
         self.available_copies_for_sale = available_copies_for_sale
         self.price = price
-        self.location = location
+        self.library_location = library_location
+        self.bookstore_location = bookstore_location
         self.language = language
         self.photo = photo
         self.created_at = created_at
@@ -49,7 +51,8 @@ class BookDTO:
             'available_copies_in_library': self.available_copies_in_library,
             'available_copies_for_sale': self.available_copies_for_sale,
             'price': self.price,
-            'location': self.location,
+            'library_location': self.library_location,
+            'bookstore_location': self.bookstore_location,
             'language': self.language,
             'photo': self.photo,
             'created_at': self.created_at,
