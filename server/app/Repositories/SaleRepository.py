@@ -16,3 +16,7 @@ class SaleRepository:
             Sale.deleted_at == None
         ).order_by(Sale.sale_date.desc())
         return self.db.session.scalars(stm).all()
+
+    def get_by_id(self, sale_id: int) -> Sale | None:
+        stm = self.db.select(Sale).filter(Sale.id == sale_id, Sale.deleted_at == None)
+        return self.db.session.scalar(stm)

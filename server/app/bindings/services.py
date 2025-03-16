@@ -9,6 +9,7 @@ def services(binder):
     from app.Services.Clients.ListClientsService import ListClientsService
     from app.Services.Clients.FindClientByIDService import FindClientByIDService
     from app.Services.Clients.CreateClientService import CreateClientService
+    from app.Services.Sales.FindSaleByIDService import FindSaleByIDService
     from app.Services.Sales.ListSalesService import ListSalesService
     binder.bind(ListAllBooksService, to=ListAllBooksService)
     binder.bind(FindBookByIdService, to=FindBookByIdService)
@@ -21,3 +22,4 @@ def services(binder):
     binder.bind(FindClientByIDService, to=FindClientByIDService)
     binder.bind(CreateClientService, to=CreateClientService)
     binder.bind(ListSalesService, to=ListSalesService)
+    binder.bind(FindSaleByIDService, to=FindSaleByIDService)
