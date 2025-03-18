@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -22,19 +22,53 @@ const AddBookModal = ({ open, onClose, onBookAdded }: { open: boolean; onClose: 
   const [shopCopies, setShopCopies] = useState("");
   const [location, setLocation] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  
+  const [authors, setAuthors] = useState<{ id: number; name: string }[]>([]);
+  const [publishers, setPublishers] = useState<{ id: number; name: string }[]>([]);
+
+  // ✅ Fetch authors and publishers when modal opens
+  useEffect(() => {
+    if (open) {
+      fetchAuthors();
+      fetchPublishers();
+    }
+  }, [open]);
+
+  const fetchAuthors = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/v1/authors");
+      if (response.ok) {
+        const data = await response.json();
+        setAuthors(data);
+      }
+    } catch (error) {
+      console.error("Error fetching authors:", error);
+    }
+  };
+
+  const fetchPublishers = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/v1/publishers");
+      if (response.ok) {
+        const data = await response.json();
+        setPublishers(data);
+      }
+    } catch (error) {
+      console.error("Error fetching publishers:", error);
+    }
+  };
 
   // ✅ Handle book submission
   const handleAddBook = async () => {
-    // ✅ Fix: Convert author and publisher to objects
     const newBook = {
       name: bookName,
-      author: author ? { name: author } : null, // Fix null issue
-      publisher: publisher ? { name: publisher } : null,
-      price: parseFloat(price) || 0, // Default to 0 if empty
+      author_id: author || null, // Send author ID instead of object
+      publisher_id: publisher || null, // Send publisher ID instead of object
+      price: parseFloat(price) || 0,
       available_copies_in_library: parseInt(libraryCopies) || 0,
       available_copies_for_sale: parseInt(shopCopies) || 0,
-      location: location || "Unknown", // Default location if empty
-      image_url: imageUrl || "", // Allow empty image URL
+      location: location || "Unknown",
+      image_url: imageUrl || "",
     };
 
     try {
@@ -57,8 +91,8 @@ const AddBookModal = ({ open, onClose, onBookAdded }: { open: boolean; onClose: 
         setLocation("");
         setImageUrl("");
 
-        onClose(); // Close modal FIRST
-        setTimeout(onBookAdded, 500); // Delay book fetching for state update
+        onClose();
+        setTimeout(onBookAdded, 500);
       } else {
         alert("Failed to add book");
       }
@@ -73,12 +107,16 @@ const AddBookModal = ({ open, onClose, onBookAdded }: { open: boolean; onClose: 
       <DialogContent>
         <Box display="grid" gap={2} gridTemplateColumns="1fr 1fr">
           <TextField label="Book Name" value={bookName} onChange={(e) => setBookName(e.target.value)} fullWidth />
+
           {/* Dropdown for Author */}
           <FormControl fullWidth>
             <InputLabel>Author</InputLabel>
             <Select value={author} onChange={(e) => setAuthor(e.target.value)}>
-              <MenuItem value="talha">Talha</MenuItem>
-              <MenuItem value="Author2">Author 2</MenuItem>
+              {authors.map((auth) => (
+                <MenuItem key={auth.id} value={auth.id}>
+                  {auth.name}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
 
@@ -86,8 +124,11 @@ const AddBookModal = ({ open, onClose, onBookAdded }: { open: boolean; onClose: 
           <FormControl fullWidth>
             <InputLabel>Publisher</InputLabel>
             <Select value={publisher} onChange={(e) => setPublisher(e.target.value)}>
-              <MenuItem value="Rabwah Test">Rabwah Test</MenuItem>
-              <MenuItem value="Publisher2">Publisher 2</MenuItem>
+              {publishers.map((pub) => (
+                <MenuItem key={pub.id} value={pub.id}>
+                  {pub.name}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
           

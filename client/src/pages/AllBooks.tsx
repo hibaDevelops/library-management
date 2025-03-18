@@ -1,12 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import {
   AppBar, Toolbar, Typography, Button, Menu, MenuItem, Table, TableBody, TableCell,
-  TableContainer, TableHead, TableRow, Paper
-} from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import AddIcon from '@mui/icons-material/Add';
-import '../App.css';
-import AddBook from "../components/AddBook"; 
+  TableContainer, TableHead, TableRow, Paper, Checkbox
+} from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
+import AddIcon from "@mui/icons-material/Add";
+import SellIcon from "@mui/icons-material/ShoppingCart";
+import IssueIcon from "@mui/icons-material/AssignmentTurnedIn";
+import "../App.css";
+import AddBook from "../components/AddBook";
+import SellBook from "../components/SellBook";
+import IssueBook from "../components/IssueBook";
 
 interface Author {
   id: number;
@@ -21,41 +25,38 @@ interface Publisher {
 interface Book {
   id: number;
   name: string;
-  author: Author | null;  // ✅ Fix: Allow `null` values
+  author: Author | null;
   location: string;
   available_copies_in_library: number;
   available_copies_for_sale: number;
   price: number;
-  publisher: Publisher | null; // ✅ Fix: Allow `null` values
+  publisher: Publisher | null;
   image_url?: string;
 }
 
 const AllBooks = () => {
-  const [openModal, setOpenModal] = useState(false);
+  const [openAddModal, setOpenAddModal] = useState(false);
+  const [openSellModal, setOpenSellModal] = useState(false);
+  const [openIssueModal, setOpenIssueModal] = useState(false);
   const [books, setBooks] = useState<Book[]>([]);
+  const [selectedBooks, setSelectedBooks] = useState<Book[]>([]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const baseURL = 'http://localhost:8080';
-
-  // ✅ Fetch books from the backend
-  const fetchBooks = async () => {
-    try {
-      const response = await fetch(`${baseURL}/api/v1/books`);
-      const data = await response.json();
-      
-      // ✅ Fix: Ensure books is always an array
-      if (data.books) {
-        setBooks(Array.isArray(data.books) ? data.books : [data.books]);
-      } else {
-        setBooks([]); // Handle case where no books are available
-      }
-    } catch (error) {
-      console.error("Error fetching books:", error);
-    }
-  };
+  const baseURL = "http://localhost:8080";
 
   useEffect(() => {
     fetchBooks();
   }, []);
+
+  // ✅ Fetch books from API
+  const fetchBooks = async () => {
+    try {
+      const response = await fetch(`${baseURL}/api/v1/books`);
+      const data = await response.json();
+      setBooks(data.books || []);
+    } catch (error) {
+      console.error("Error fetching books:", error);
+    }
+  };
 
   const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -65,52 +66,63 @@ const AllBooks = () => {
     setAnchorEl(null);
   };
 
+  // ✅ Handle book selection (Checkbox logic)
+  const handleBookSelect = (book: Book) => {
+    setSelectedBooks((prevSelected) =>
+      prevSelected.some((b) => b.id === book.id)
+        ? prevSelected.filter((b) => b.id !== book.id)
+        : [...prevSelected, book]
+    );
+  };
+
   return (
     <div>
-      {/* Navbar */}
       <AppBar position="static" sx={{ backgroundColor: "#ffffff", color: "black" }}>
         <Toolbar>
           <Typography variant="h6" sx={{ flexGrow: 1 }}>All Books</Typography>
 
-          {/* Dropdown Menu */}
-          <Button 
-            aria-controls="simple-menu" 
-            aria-haspopup="true" 
-            onClick={handleMenuClick} 
+          <Button
+            aria-controls="simple-menu"
+            aria-haspopup="true"
+            onClick={handleMenuClick}
             startIcon={<MenuIcon />}
             sx={{ color: "black" }}
           >
             Collections
           </Button>
-          <Menu
-            id="simple-menu"
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleMenuClose}
-          >
+          <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
             <MenuItem onClick={handleMenuClose}>Search By Author</MenuItem>
             <MenuItem onClick={handleMenuClose}>All Books</MenuItem>
           </Menu>
 
-          {/* Add New Book Button */}
-          <Button 
-            variant="contained" 
-            sx={{ backgroundColor: "#8BC34A", color: "black", marginLeft: 2 }}
-            startIcon={<AddIcon />}
-            onClick={() => setOpenModal(true)}
-          >
-            Add New Book
+          <Button variant="contained" sx={{ bgcolor: "#8BC34A", color: "black", ml: 2 }}
+            startIcon={<AddIcon />} onClick={() => setOpenAddModal(true)}>
+            Add Book
           </Button>
-          <AddBook open={openModal} onClose={() => setOpenModal(false)} onBookAdded={fetchBooks} />
+
+          <Button variant="contained" sx={{ bgcolor: "#2196F3", color: "black", ml: 2 }}
+            startIcon={<IssueIcon />} disabled={selectedBooks.length === 0}
+            onClick={() => setOpenIssueModal(true)}>
+            Issue Book
+          </Button>
+
+          <Button variant="contained" sx={{ bgcolor: "#FF9800", color: "black", ml: 2 }}
+            startIcon={<SellIcon />} disabled={selectedBooks.length === 0}
+            onClick={() => setOpenSellModal(true)}>
+            Sell Book
+          </Button>
+
+          <AddBook open={openAddModal} onClose={() => setOpenAddModal(false)} onBookAdded={fetchBooks} />
+          <SellBook open={openSellModal} onClose={() => setOpenSellModal(false)} books={selectedBooks} onBookSold={fetchBooks} />
+          <IssueBook open={openIssueModal} onClose={() => setOpenIssueModal(false)} books={selectedBooks} onBookIssued={fetchBooks} />
         </Toolbar>
       </AppBar>
-      
-      {/* Books Table */}
-      <TableContainer component={Paper} sx={{ marginTop: 2, padding: 2 }}>
+
+      <TableContainer component={Paper} sx={{ mt: 2, p: 2 }}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell><b>Image</b></TableCell>
+              <TableCell><b>Select</b></TableCell>
               <TableCell><b>Name</b></TableCell>
               <TableCell><b>Author</b></TableCell>
               <TableCell><b>Location</b></TableCell>
@@ -121,34 +133,21 @@ const AllBooks = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {books.length > 0 ? (
-              books.map((book) => (
-                <TableRow key={book.id}>
-                  {/* Book Image */}
-                  <TableCell>
-                    <img 
-                      src={book.image_url || "https://via.placeholder.com/50"} 
-                      alt="Book Cover" 
-                      style={{ height: 50 }} 
-                    />
-                  </TableCell>
-
-                  {/* Book Details */}
-                  <TableCell>{book.name}</TableCell>
-
-                  {/* ✅ Fix: Handle `null` authors */}
-                  <TableCell>{book.author ? book.author.name : "Unknown Author"}</TableCell>
-
-                  <TableCell>{book.location}</TableCell>
-                  <TableCell>{book.available_copies_in_library}</TableCell>
-                  <TableCell>{book.available_copies_for_sale}</TableCell>
-                  <TableCell>${book.price.toFixed(2)}</TableCell>
-
-                  {/* ✅ Fix: Handle `null` publishers */}
-                  <TableCell>{book.publisher ? book.publisher.name : "Unknown Publisher"}</TableCell>
-                </TableRow>
-              ))
-            ) : (
+            {books.map((book) => (
+              <TableRow key={book.id}>
+                <TableCell>
+                  <Checkbox checked={selectedBooks.includes(book)} onChange={() => handleBookSelect(book)} />
+                </TableCell>
+                <TableCell>{book.name}</TableCell>
+                <TableCell>{book.author ? book.author.name : "Unknown Author"}</TableCell>
+                <TableCell>{book.location}</TableCell>
+                <TableCell>{book.available_copies_in_library}</TableCell>
+                <TableCell>{book.available_copies_for_sale}</TableCell>
+                <TableCell>${book.price.toFixed(2)}</TableCell>
+                <TableCell>{book.publisher ? book.publisher.name : "Unknown Publisher"}</TableCell>
+              </TableRow>
+            ))}
+            {books.length === 0 && (
               <TableRow>
                 <TableCell colSpan={8} align="center">No books available</TableCell>
               </TableRow>
@@ -158,6 +157,6 @@ const AllBooks = () => {
       </TableContainer>
     </div>
   );
-}
+};
 
 export default AllBooks;
