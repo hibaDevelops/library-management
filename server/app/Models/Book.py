@@ -5,6 +5,7 @@ from app.Models.BaseModel import BaseModel
 
 class Book(BaseModel, db.Model):
     __tablename__ = "books"
+
     name = db.Column(db.String(255), nullable=False)
     author_id = db.Column(db.Integer, db.ForeignKey("authors.id"))
     publisher_id = db.Column(db.Integer, db.ForeignKey("publishers.id"))

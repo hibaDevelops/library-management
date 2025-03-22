@@ -1,6 +1,7 @@
 from app.DTO.AuthorDTO import AuthorDTO
 from app.Models.Author import Author
 
+
 class AuthorMapper:
     @staticmethod
     def to_dto(author: Author) -> AuthorDTO | None:
