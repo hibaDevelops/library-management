@@ -213,7 +213,7 @@ const IssueBook = ({ open, onClose, books, onBookIssued }: IssueBookProps) => {
             <TextField label="Borrower Jama'at" value={borrowerJamaat} disabled fullWidth />
             <TextField label="Borrower Phone" value={borrowerPhone} disabled fullWidth />
                {/* ✅ Issue & Return Dates */}
-               <DatePicker label="Issue Date" value={issueDate} onChange={(date) => setIssueDate(date)} />
+            <DatePicker label="Issue Date" value={issueDate} onChange={(date) => setIssueDate(date)} />
             <DatePicker label="Expected Return Date" value={returnDate} onChange={(date) => setReturnDate(date)} />
           </LocalizationProvider>
         </Box>
