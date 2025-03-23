@@ -55,10 +55,17 @@ const IssueBook = ({ open, onClose, books, onBookIssued }: IssueBookProps) => {
 
   useEffect(() => {
     if (open) {
-      fetch(`${baseURL}/api/v1/borrowers`)
-        .then((res) => res.json())
-        .then((data) => setBorrowers(data.borrowers || []))
-        .catch((error) => console.error("Error fetching borrowers:", error));
+      fetch(`${baseURL}/api/v1/clients`)
+  .then((res) => res.json())
+  .then((data) => {
+    const formatted = (data.clients || data).map((client: any) => ({
+      id: client.id,
+      name: `${client.firstname} ${client.lastname}`,
+      phone: client.phone,
+      jamaat: "N/A", // or use a real field if you add it later
+    }));
+    setBorrowers(formatted);
+  })
 
       setSelectedBooks(books.map((book) => ({ id: book.id, name: book.name, quantity: 1 })));
     }
